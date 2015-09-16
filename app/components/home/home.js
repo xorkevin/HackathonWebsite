@@ -7,7 +7,3 @@ class HomeController {
 }
 
 app.controller('HomeController', [HomeController]);
-
-// export {
-//   HomeController
-// };
