@@ -71,14 +71,18 @@
 	var AppController = function AppController($router) {
 	  _classCallCheck(this, AppController);
 
-	  $router.config([{ path: '/home:section', components: {
+	  $router.config([{ path: '/home/:section', components: {
 	      'header': 'header',
 	      'main': 'home',
 	      'nav': 'navbar',
 	      'footer': 'footer'
-	    } }, { path: '/', redirectTo: '/home' }]);
+	    }, as: 'home' }, { path: '/', redirectTo: '/home/0' }]);
 	  this.world = 'Hello, world!';
-	};
+	}
+	// app.config(['$locationProvider', function($locationProvider) {
+	//        $locationProvider.html5Mode(true);
+	//    }]);
+	;
 
 	_moduleJs.app.controller('AppController', ['$router', AppController]);
 
@@ -16463,19 +16467,41 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 	var _moduleJs = __webpack_require__(4);
 
-	var HomeController = function HomeController() {
-	  _classCallCheck(this, HomeController);
+	var NAVHEIGHT = 80;
 
-	  this.name = 'kevin';
-	};
+	var HomeController = (function () {
+	  function HomeController($routeParams) {
+	    _classCallCheck(this, HomeController);
 
-	_moduleJs.app.controller('HomeController', [HomeController]);
+	    this.routeParams = $routeParams;
+	  }
+
+	  _createClass(HomeController, [{
+	    key: "activate",
+	    value: function activate() {
+	      var id = this.routeParams.section;
+	      if (id == 0 && $(window).scrollTop() != 0) {
+	        $("html, body").animate({ scrollTop: 0 }, 125);
+	      } else {
+	        $("html, body").animate({ scrollTop: $('#homeSection-' + id).offset().top - NAVHEIGHT }, 125, function () {
+	          $(window).scroll();
+	        });
+	      }
+	    }
+	  }]);
+
+	  return HomeController;
+	})();
+
+	_moduleJs.app.controller('HomeController', ['$routeParams', HomeController]);
 
 /***/ },
 /* 6 */
@@ -16483,13 +16509,35 @@
 
 	'use strict';
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	var _moduleJs = __webpack_require__(4);
 
-	var NavbarController = function NavbarController() {
-	  _classCallCheck(this, NavbarController);
-	};
+	var NAVHEIGHT = 64;
+
+	var NavbarController = (function () {
+	  function NavbarController() {
+	    _classCallCheck(this, NavbarController);
+	  }
+
+	  _createClass(NavbarController, [{
+	    key: 'activate',
+	    value: function activate() {
+	      $(window).scroll(function () {
+	        if ($(window).scrollTop() < NAVHEIGHT) {
+	          $('.main-navbar').addClass('main-navbar-fill-transparent').removeClass('main-navbar-fill-regular');
+	        } else {
+	          $('.main-navbar').addClass('main-navbar-fill-regular').removeClass('main-navbar-fill-transparent');
+	        }
+	      });
+	      $(window).scroll();
+	    }
+	  }]);
+
+	  return NavbarController;
+	})();
 
 	_moduleJs.app.controller('NavbarController', [NavbarController]);
 
