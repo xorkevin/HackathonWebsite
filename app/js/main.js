@@ -14,7 +14,7 @@ class AppController {
         'main': 'home',
         'nav': 'navbar',
         'footer': 'footer'
-      }},
+      }, as: 'home'},
       {path: '/', redirectTo: '/home/0'}
     ]);
     this.world = 'Hello, world!';
